@@ -1,0 +1,5 @@
+## Prisma
+npx prisma studio
+
+## Docker-Compose
+docker compose up dev-db -d

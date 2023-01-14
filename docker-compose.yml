@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:13
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: lakshaydev
+      POSTGRES_PASSWORD: lakshay14
+      POSTGRES_DB: nest-restapi-dev-db
+    networks:
+      - lakshaydev
+  test-db:
+    image: postgres:13
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: lakshaytest
+      POSTGRES_PASSWORD: lakshay14
+      POSTGRES_DB: nest-restapi-test-db
+    networks:
+      - lakshaydev
+networks:
+  lakshaydev:
+
