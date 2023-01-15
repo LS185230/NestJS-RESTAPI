@@ -5,7 +5,12 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [UserModule, BookmarkModule, AuthenticationModule, DatabaseModule],
+  imports: [
+    UserModule,
+    BookmarkModule,
+    AuthenticationModule,
+    DatabaseModule,
+  ],
   controllers: [],
   providers: [],
 })

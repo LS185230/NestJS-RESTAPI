@@ -1,11 +1,17 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+} from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { AuthenticationDTO } from './dto';
 
 @Controller('auth')
 export class AuthenticationController {
   // Doing Dependency Injection fir Auth Service (private -> Short Hand Notation)
-  constructor(private authService: AuthenticationService) {}
+  constructor(
+    private authService: AuthenticationService,
+  ) {}
 
   @Post('signup') // => PostReq = /auth/signup
   signUp(@Body() dto: AuthenticationDTO) {
@@ -14,7 +20,7 @@ export class AuthenticationController {
   }
 
   @Post('signin') // => PostReq = /auth/signin
-  signIn() {
-    return this.authService.signin();
+  signIn(@Body() dto: AuthenticationDTO) {
+    return this.authService.signin(dto);
   }
 }
