@@ -6,11 +6,19 @@ import { DatabaseService } from 'src/database/database.service';
 import { AuthenticationDTO } from './dto';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { JwtService } from '@nestjs/jwt/dist';
+import { use } from 'passport';
+import { config } from 'process';
+import { ConfigService } from '@nestjs/config/dist';
 
 @Injectable({})
 export class AuthenticationService {
-  // Dependency Injection of DatabaseService
-  constructor(private prisma: DatabaseService) {}
+  // Dependency Injection of DatabaseService and JwtService
+  constructor(
+    private prisma: DatabaseService,
+    private jwt: JwtService,
+    private config: ConfigService,
+  ) {}
 
   async signin(dto: AuthenticationDTO) {
     console.log(
@@ -44,10 +52,9 @@ export class AuthenticationService {
         throw new ForbiddenException(
           'Wrong Password',
         );
-      } else {
-        delete user.hash;
-        return user;
       }
+
+      return this.signToken(user.id, user.email);
     } catch (error) {
       throw error;
     }
@@ -71,10 +78,8 @@ export class AuthenticationService {
           hash: hashPw,
         },
       });
-      delete user.hash;
 
-      /* Return the New User */
-      return user;
+      return this.signToken(user.id, user.email);
     } catch (error) {
       if (
         error instanceof
@@ -89,5 +94,21 @@ export class AuthenticationService {
         throw error;
       }
     }
+  }
+
+  async signToken(
+    userId: number,
+    email: string,
+  ): Promise<{ access_token: string }> {
+    const payload = { sub: userId, email: email };
+    const secret = this.config.get('JWT_SECRET');
+    const token = await this.jwt.signAsync(
+      payload,
+      { expiresIn: '15m', secret: secret },
+    );
+
+    return {
+      access_token: token,
+    };
   }
 }

@@ -1,5 +1,8 @@
 ## Prisma
 npx prisma studio
+npx prisma migrate dev
+npx prisma migrate deploy
 
 ## Docker-Compose
 docker compose up dev-db -d
+docker compose rm dev-db -s -f -v

@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { DatabaseModule } from 'src/database/database.module';
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
+import { JwtStrategy } from './strategy';
 
 @Module({
-  // This Module is Needed in all Modules so we will make it as Global so that we dont need to Import it everytime
-  //imports:[DatabaseModule],
+  imports: [JwtModule.register({})],
   controllers: [AuthenticationController],
-  providers: [AuthenticationService],
+  providers: [AuthenticationService, JwtStrategy],
 })
 export class AuthenticationModule {}
